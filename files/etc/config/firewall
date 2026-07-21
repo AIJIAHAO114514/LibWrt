@@ -1,0 +1,52 @@
+config defaults
+        option syn_flood '1'
+        option input 'ACCEPT'
+        option output 'ACCEPT'
+        option forward 'REJECT'
+
+config zone
+        option name 'lan'
+        list network 'lan'
+        list network 'vlan233'
+        list network 'vlan254'
+        list network 'vlan1001'
+        list network 'vlan1002'
+        list network 'vlan1003'
+        list network 'vlan1004'
+        list network 'vlan1005'
+        list network 'vlan1006'
+        list network 'vlan1007'
+        list network 'vlan1100'
+        option input 'ACCEPT'
+        option output 'ACCEPT'
+        option forward 'ACCEPT'
+
+config zone
+        option name 'wan'
+        list network 'wan'
+        list network 'wan6'
+        option input 'REJECT'
+        option output 'ACCEPT'
+        option forward 'REJECT'
+        option masq '1'
+        option mtu_fix '1'
+
+config forwarding
+        option src 'lan'
+        option dest 'wan'
+
+# ===== 允许从 VLAN233 (ESXi管理) SSH 到路由器 =====
+config rule
+        option name 'Allow-SSH-MGMT'
+        option src 'lan'
+        option dest_port '22'
+        option proto 'tcp'
+        option target 'ACCEPT'
+
+# ===== 允许 frps 端口 =====
+config rule
+        option name 'Allow-FRPS'
+        option src 'wan'
+        option dest_port '7000 7500'
+        option proto 'tcp'
+        option target 'ACCEPT'

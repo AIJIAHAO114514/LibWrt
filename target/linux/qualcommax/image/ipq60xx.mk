@@ -318,7 +318,7 @@ define Device/zn_m2
 	PAGESIZE := 2048
 	SOC := ipq6000
 	DEVICE_DTS_CONFIG := config@cp03-c1
-	DEVICE_PACKAGES := ipq-wifi-zn_m2
+	DEVICE_PACKAGES :=
 endef
 TARGET_DEVICES += zn_m2
 

@@ -1,0 +1,211 @@
+config interface 'loopback'
+        option device 'lo'
+        option proto 'static'
+        option ipaddr '127.0.0.1'
+        option netmask '255.0.0.0'
+
+config globals 'globals'
+        option ula_prefix 'fd00::/48'
+
+# ===== 桥接设备：lan1/lan2/lan3 做 trunk =====
+config device
+        option name 'br-lan'
+        option type 'bridge'
+        list ports 'lan1'
+        list ports 'lan2'
+        list ports 'lan3'
+
+# ===== WAN 设备（物理口，PPPoE 拨号）=====
+config device
+        option name 'wan'
+
+# ===== Bridge VLAN 过滤 =====
+# 每个 lan 口都是 trunk，允许所有 VLAN tagged 通过
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '1'
+        list ports 'lan1'
+        list ports 'lan2'
+        list ports 'lan3'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '10'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '41'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '48'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '51'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '233'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '254'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '1001'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '1002'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '1003'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '1004'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '1005'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '1006'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '1007'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+config bridge-vlan
+        option device 'br-lan'
+        option vlan '1100'
+        list ports 'lan1:t'
+        list ports 'lan2:t'
+        list ports 'lan3:t'
+
+# ===== WAN PPPoE =====
+config interface 'wan'
+        option device 'wan'
+        option proto 'pppoe'
+        option username 'YOUR_PPPOE_ACCOUNT'
+        option password 'YOUR_PPPOE_PASSWORD'
+        option ipv6 'auto'
+
+config interface 'wan6'
+        option device '@wan'
+        option proto 'dhcpv6'
+
+# ===== VLAN 10 — 管理网段 =====
+config interface 'lan'
+        option device 'br-lan.10'
+        option proto 'static'
+        option ipaddr '192.168.0.1'
+        option netmask '255.255.255.0'
+        option ip6assign '60'
+
+# ===== VLAN 233 — ESXi/服务器管理 =====
+config interface 'vlan233'
+        option device 'br-lan.233'
+        option proto 'static'
+        option ipaddr '192.168.233.254'
+        option netmask '255.255.255.0'
+
+# ===== VLAN 254 — 设备管理 =====
+config interface 'vlan254'
+        option device 'br-lan.254'
+        option proto 'static'
+        option ipaddr '192.168.254.1'
+        option netmask '255.255.255.0'
+
+# ===== VLAN 1001~1007 — 业务 VLAN =====
+config interface 'vlan1001'
+        option device 'br-lan.1001'
+        option proto 'static'
+        option ipaddr '192.168.1.254'
+        option netmask '255.255.255.0'
+
+config interface 'vlan1002'
+        option device 'br-lan.1002'
+        option proto 'static'
+        option ipaddr '192.168.2.254'
+        option netmask '255.255.255.0'
+
+config interface 'vlan1003'
+        option device 'br-lan.1003'
+        option proto 'static'
+        option ipaddr '192.168.3.254'
+        option netmask '255.255.255.0'
+
+config interface 'vlan1004'
+        option device 'br-lan.1004'
+        option proto 'static'
+        option ipaddr '192.168.4.254'
+        option netmask '255.255.255.0'
+
+config interface 'vlan1005'
+        option device 'br-lan.1005'
+        option proto 'static'
+        option ipaddr '192.168.5.254'
+        option netmask '255.255.255.0'
+
+config interface 'vlan1006'
+        option device 'br-lan.1006'
+        option proto 'static'
+        option ipaddr '192.168.6.254'
+        option netmask '255.255.255.0'
+
+config interface 'vlan1007'
+        option device 'br-lan.1007'
+        option proto 'static'
+        option ipaddr '192.168.7.254'
+        option netmask '255.255.255.0'
+
+# ===== VLAN 1100 — WiFi/DHCP 网段 =====
+config interface 'vlan1100'
+        option device 'br-lan.1100'
+        option proto 'static'
+        option ipaddr '192.168.100.254'
+        option netmask '255.255.255.0'
