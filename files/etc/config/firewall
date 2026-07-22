@@ -1,5 +1,8 @@
 config defaults
         option syn_flood '1'
+        option fullcone '1'
+        option fullcone6 '1'
+        option flow_offloading_hw '1'
         option input 'ACCEPT'
         option output 'ACCEPT'
         option forward 'REJECT'
@@ -50,3 +53,13 @@ config rule
         option dest_port '7000 7500'
         option proto 'tcp'
         option target 'ACCEPT'
+
+# ===== NAT 回环 (Hairpin NAT) =====
+# 目标 IP 已替换为占位符 1.1.1.1，刷机后改为实际公网 IP
+config nat
+        option name '防火墙回环'
+        option src '*'
+        option dest '*'
+        option dest_ip '1.1.1.1'
+        option target 'SNAT'
+        option snat_ip '192.168.0.1'
