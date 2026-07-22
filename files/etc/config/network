@@ -6,8 +6,8 @@ config interface 'loopback'
 
 config globals 'globals'
         option ula_prefix 'fd00::/48'
+        option packet_steering '0'
 
-# ===== 桥接设备 =====
 config device
         option name 'br-lan'
         option type 'bridge'
@@ -15,22 +15,16 @@ config device
         list ports 'lan2'
         list ports 'lan3'
 
-# ===== WAN 设备 =====
 config device
         option name 'wan'
 
-# ===== Bridge VLAN =====
-# VLAN 1 — 非成员组（所有端口 PVID 已分配到其他 VLAN）
-
-# VLAN 10 — lan1/lan3 untagged, lan2 tagged
 config bridge-vlan
         option device 'br-lan'
         option vlan '10'
-        list ports 'lan1'
-        list ports 'lan3'
+        list ports 'lan1:u*'
         list ports 'lan2:t'
+        list ports 'lan3:u*'
 
-# VLAN 41
 config bridge-vlan
         option device 'br-lan'
         option vlan '41'
@@ -38,7 +32,6 @@ config bridge-vlan
         list ports 'lan2:t'
         list ports 'lan3:t'
 
-# VLAN 48
 config bridge-vlan
         option device 'br-lan'
         option vlan '48'
@@ -46,7 +39,6 @@ config bridge-vlan
         list ports 'lan2:t'
         list ports 'lan3:t'
 
-# VLAN 51
 config bridge-vlan
         option device 'br-lan'
         option vlan '51'
@@ -54,15 +46,13 @@ config bridge-vlan
         list ports 'lan2:t'
         list ports 'lan3:t'
 
-# VLAN 233 — lan2 untagged, lan1/lan3 tagged
 config bridge-vlan
         option device 'br-lan'
         option vlan '233'
-        list ports 'lan2'
         list ports 'lan1:t'
+        list ports 'lan2:u*'
         list ports 'lan3:t'
 
-# VLAN 254
 config bridge-vlan
         option device 'br-lan'
         option vlan '254'
@@ -70,7 +60,6 @@ config bridge-vlan
         list ports 'lan2:t'
         list ports 'lan3:t'
 
-# VLAN 1001~1007
 config bridge-vlan
         option device 'br-lan'
         option vlan '1001'
@@ -120,7 +109,6 @@ config bridge-vlan
         list ports 'lan2:t'
         list ports 'lan3:t'
 
-# VLAN 1100
 config bridge-vlan
         option device 'br-lan'
         option vlan '1100'
@@ -128,82 +116,100 @@ config bridge-vlan
         list ports 'lan2:t'
         list ports 'lan3:t'
 
-# ===== WAN PPPoE =====
 config interface 'wan'
         option device 'wan'
         option proto 'pppoe'
         option username 'YOUR_PPPOE_ACCOUNT'
         option password 'YOUR_PPPOE_PASSWORD'
         option ipv6 'auto'
+        option reqprefix '60'
+        option norelease '0'
+        option multipath 'off'
 
-config interface 'wan6'
-        option device '@wan'
-        option proto 'dhcpv6'
-
-# ===== VLAN 接口 =====
 config interface 'lan'
         option device 'br-lan.10'
         option proto 'static'
         option ipaddr '192.168.0.1'
         option netmask '255.255.255.0'
-        option ip6assign '60'
+        option multipath 'off'
+        option delegate '0'
 
 config interface 'vlan233'
         option device 'br-lan.233'
         option proto 'static'
         option ipaddr '192.168.233.254'
         option netmask '255.255.255.0'
+        option multipath 'off'
+        option ip6assign '64'
 
 config interface 'vlan254'
         option device 'br-lan.254'
         option proto 'static'
         option ipaddr '192.168.254.1'
         option netmask '255.255.255.0'
+        option multipath 'off'
+        option delegate '0'
 
 config interface 'vlan1001'
         option device 'br-lan.1001'
         option proto 'static'
         option ipaddr '192.168.1.254'
         option netmask '255.255.255.0'
+        option multipath 'off'
+        option delegate '0'
 
 config interface 'vlan1002'
         option device 'br-lan.1002'
         option proto 'static'
         option ipaddr '192.168.2.254'
         option netmask '255.255.255.0'
+        option multipath 'off'
+        option delegate '0'
 
 config interface 'vlan1003'
         option device 'br-lan.1003'
         option proto 'static'
         option ipaddr '192.168.3.254'
         option netmask '255.255.255.0'
+        option multipath 'off'
+        option delegate '0'
 
 config interface 'vlan1004'
         option device 'br-lan.1004'
         option proto 'static'
         option ipaddr '192.168.4.254'
         option netmask '255.255.255.0'
+        option multipath 'off'
+        option delegate '0'
 
 config interface 'vlan1005'
         option device 'br-lan.1005'
         option proto 'static'
         option ipaddr '192.168.5.254'
         option netmask '255.255.255.0'
+        option multipath 'off'
+        option delegate '0'
 
 config interface 'vlan1006'
         option device 'br-lan.1006'
         option proto 'static'
         option ipaddr '192.168.6.254'
         option netmask '255.255.255.0'
+        option multipath 'off'
+        option delegate '0'
 
 config interface 'vlan1007'
         option device 'br-lan.1007'
         option proto 'static'
         option ipaddr '192.168.7.254'
         option netmask '255.255.255.0'
+        option multipath 'off'
+        option delegate '0'
 
 config interface 'vlan1100'
         option device 'br-lan.1100'
         option proto 'static'
         option ipaddr '192.168.100.254'
         option netmask '255.255.255.0'
+        option multipath 'off'
+        option delegate '0'
