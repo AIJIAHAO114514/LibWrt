@@ -212,3 +212,7 @@ config interface 'vlan1100'
         option netmask '255.255.255.0'
         option multipath 'off'
         option delegate '0'
+
+config route
+        option target '1.1.1.1/32'
+        option gateway '1.1.1.1'
