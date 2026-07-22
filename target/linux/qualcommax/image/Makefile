@@ -1,4 +1,4 @@
-EXTRA_IMAGE_NAME := $(shell date +%Y%m%d)
+EXTRA_IMAGE_NAME := $(shell TZ=Asia/Shanghai date +%Y%m%d%H%M)
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/image.mk
 
