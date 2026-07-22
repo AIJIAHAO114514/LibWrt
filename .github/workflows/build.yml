@@ -1,0 +1,87 @@
+name: 云编译 LibWrt 固件
+
+on:
+  push:
+    branches: [25.12-nss]
+  workflow_dispatch:
+    inputs:
+      clean_build:
+        description: '全量重新编译'
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: 安装编译依赖
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential clang flex g++ gawk gcc-multilib \
+            gettext git libncurses5-dev libssl-dev python3-distutils python3-setuptools \
+            rsync swig unzip zlib1g-dev file wget patch bzip2 xz-utils cpio \
+            libelf-dev cmake ninja-build
+
+      - name: 更新 feeds
+        run: |
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
+      - name: 编译固件
+        run: |
+          echo "EXTRA_IMAGE_NAME := $(date +%Y%m%d)" >> target/linux/qualcommax/image/Makefile
+          make defconfig
+          make -j$(nproc) V=s || make -j1 V=s
+
+      - name: 列出产物
+        run: |
+          echo "=== 固件文件 ==="
+          find bin/targets/qualcommax/ipq60xx -maxdepth 1 -type f -ls
+
+      - name: 上传固件 (Artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: libwrt-zn-m2-${{ github.run_id }}
+          path: |
+            bin/targets/qualcommax/ipq60xx/*-factory.ubi
+            bin/targets/qualcommax/ipq60xx/*-sysupgrade.bin
+            bin/targets/qualcommax/ipq60xx/*-initramfs-uImage.itb
+            bin/targets/qualcommax/ipq60xx/*.manifest
+            bin/targets/qualcommax/ipq60xx/sha256sums
+          retention-days: 90
+
+      - name: 创建 Release
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_id }}
+          name: "固件构建 #${{ github.run_number }} — $(date +%Y%m%d)"
+          body: |
+            ### ZN-M2 固件自动构建
+            
+            - **分支**: ${{ github.ref_name }}
+            - **提交**: ${{ github.sha }}
+            - **日期**: $(date +%Y%m%d)
+            
+            | 文件 | 用途 |
+            |------|------|
+            | `*-factory.ubi` | U-Boot 刷入 |
+            | `*-sysupgrade.bin` | 系统升级 |
+            | `*-initramfs-uImage.itb` | 恢复模式 |
+          files: |
+            bin/targets/qualcommax/ipq60xx/*-factory.ubi
+            bin/targets/qualcommax/ipq60xx/*-sysupgrade.bin
+            bin/targets/qualcommax/ipq60xx/*-initramfs-uImage.itb
+            bin/targets/qualcommax/ipq60xx/*.manifest
+            bin/targets/qualcommax/ipq60xx/sha256sums
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
