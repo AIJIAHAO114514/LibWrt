@@ -213,6 +213,6 @@ config interface 'vlan1100'
         option multipath 'off'
         option delegate '0'
 
-config route
+config route 'static_default'
         option target '1.1.1.1/32'
         option gateway '192.168.0.2'
