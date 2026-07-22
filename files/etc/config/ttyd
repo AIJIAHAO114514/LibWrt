@@ -1,0 +1,3 @@
+config ttyd
+        option command '/bin/login'
+        option check_origin '0'
