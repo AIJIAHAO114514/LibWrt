@@ -1,0 +1,44 @@
+config globals 'globals'
+	option BaseDir '/var/run/collectd'
+	option PIDFile '/var/run/collectd.pid'
+	option PluginDir '/usr/lib/collectd'
+	option TypesDB '/usr/share/collectd/types.db'
+	option Interval '30'
+	option ReadThreads '2'
+	option WriteThreads '2'
+
+# ---- 输出插件 ----
+config plugin 'rrdtool'
+	option enable '1'
+	option DataDir '/tmp/rrd'
+	option RRARows '200'
+	list RRATimespan '3600'
+	list RRATimespan '86400'
+	list RRATimespan '604800'
+	list RRATimespan '2678400'
+	list RRATimespan '31622400'
+
+# ---- 采集插件（已安装的） ----
+config plugin 'cpu'
+	option enable '1'
+
+config plugin 'memory'
+	option enable '1'
+
+config plugin 'load'
+	option enable '1'
+
+config plugin 'interface'
+	option enable '1'
+	list Interface 'br-lan'
+
+# ---- 可选（如需使用，在 .config 中启用对应 collectd-mod-* 包） ----
+# config plugin 'conntrack'
+# 	option enable '1'
+# 
+# config plugin 'disk'
+# 	option enable '1'
+# 	list Disk 'mmcblk0'
+# 
+# config plugin 'uptime'
+# 	option enable '1'

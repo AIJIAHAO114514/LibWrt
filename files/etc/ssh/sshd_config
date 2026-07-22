@@ -1,0 +1,34 @@
+# OpenSSH sshd_config for OpenWrt
+# 允许 root 密码登录（内网路由器场景）
+
+Port 22
+AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress ::
+
+# 认证
+PermitRootLogin yes
+PasswordAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+
+# 安全（内网路由器适当放宽）
+IgnoreRhosts yes
+HostbasedAuthentication no
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+UsePAM no
+X11Forwarding no
+PrintMotd no
+
+# 性能
+UseDNS no
+ClientAliveInterval 60
+ClientAliveCountMax 3
+
+# HostKeys
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# 子系统
+Subsystem sftp /usr/lib/sftp-server

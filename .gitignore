@@ -16,7 +16,6 @@
 /overlay
 /package/feeds
 /package/openwrt-packages
-pppoe-secrets.txt
 /*.patch
 /llvm-bpf*
 key-build*
