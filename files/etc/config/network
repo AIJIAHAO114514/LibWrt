@@ -139,6 +139,7 @@ config interface 'vlan233'
         option ipaddr '192.168.233.254'
         option netmask '255.255.255.0'
         option multipath 'off'
+        list ip6class 'wan_6'
         option ip6assign '64'
 
 config interface 'vlan254'

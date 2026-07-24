@@ -1,7 +1,8 @@
 config defaults
-        option syn_flood '1'
+        option synflood_protect '1'
         option fullcone '1'
         option fullcone6 '1'
+        option flow_offloading '1'
         option flow_offloading_hw '1'
         option input 'ACCEPT'
         option output 'ACCEPT'
@@ -63,3 +64,8 @@ config nat
         option dest_ip '1.1.1.1'
         option target 'SNAT'
         option snat_ip '192.168.0.1'
+        list proto 'all'
+
+config include 'qcanssecm'
+        option type 'script'
+        option path '/etc/firewall.d/qca-nss-ecm'
